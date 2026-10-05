@@ -1,51 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#F9F8FF">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="People Directory"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:paddingBottom="4dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="10dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="10dp">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="JSON API + SQLite Database"
-        android:textSize="14sp"
-        android:paddingBottom="12dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="12dp"
+            android:text="SQLite and JSON Practical"
+            android:textColor="#303038"
+            android:textSize="16sp"
+            android:textStyle="normal" />
 
-    <Button
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <ListView
+            android:id="@+id/peopleList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"
+            android:paddingBottom="10dp"
+            android:scrollbars="none" />
+
+        <TextView
+            android:id="@+id/emptyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="24dp"
+            android:text="No records yet. Tap refresh to load data."
+            android:textColor="#6A6A73"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <ImageButton
         android:id="@+id/refreshButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Refresh from API" />
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/refresh_bg"
+        android:contentDescription="Refresh data"
+        android:elevation="8dp"
+        android:padding="14dp"
+        android:src="@drawable/ic_refresh"
+        android:tint="#284C8F" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
-
-    <ListView
-        android:id="@+id/peopleList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:dividerHeight="8dp" />
-
-    <TextView
-        android:id="@+id/emptyText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="No records yet. Tap Refresh from API."
-        android:textSize="16sp"
-        android:padding="24dp" />
-</LinearLayout>
+</FrameLayout>
