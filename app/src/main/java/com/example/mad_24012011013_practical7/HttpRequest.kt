@@ -1,83 +1,41 @@
 package com.example.mad_24012011013_practical7
 
-import android.util.Log
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
+import org.json.JSONArray
 import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.ProtocolException
 import java.net.URL
 
-class HttpRequest {
+object HttpRequest {
+    private const val API_URL = "https://jsonplaceholder.typicode.com/users"
 
-    companion object {
-        private const val TAG = "HttpRequest"
-    }
-
-    fun makeServiceCall(
-        reqUrl: String?,
-        token: String? = null
-    ): String? {
-
-        var response: String? = null
-
-        try {
-            val url = URL(reqUrl)
-
-            val conn = url.openConnection() as HttpURLConnection
-
-            if (token != null) {
-                conn.setRequestProperty(
-                    "Authorization",
-                    "Bearer $token"
-                )
-
-                conn.setRequestProperty(
-                    "Content-Type",
-                    "application/json"
-                )
+    fun fetchPeople(): List<Person> {
+        val connection = (URL(API_URL).openConnection() as HttpURLConnection).apply {
+            requestMethod = "GET"
+            connectTimeout = 10000
+            readTimeout = 10000
+        }
+        return try {
+            val text = connection.inputStream.bufferedReader().use { it.readText() }
+            val array = JSONArray(text)
+            buildList {
+                for (i in 0 until array.length()) {
+                    val item = array.getJSONObject(i)
+                    val addressObject = item.optJSONObject("address")
+                    val geo = addressObject?.optJSONObject("geo")
+                    add(
+                        Person(
+                            id = item.getInt("id"),
+                            name = item.optString("name"),
+                            phone = item.optString("phone"),
+                            email = item.optString("email"),
+                            address = addressObject?.optString("street").orEmpty() + ", " + addressObject?.optString("city").orEmpty(),
+                            latitude = geo?.optString("lat").orEmpty(),
+                            longitude = geo?.optString("lng").orEmpty()
+                        )
+                    )
+                }
             }
-
-            conn.requestMethod = "GET"
-
-            response = convertStreamToString(
-                BufferedInputStream(conn.inputStream)
-            )
-
-        } catch (e: MalformedURLException) {
-            Log.e(TAG, "MalformedURLException: " + e.message)
-
-        } catch (e: ProtocolException) {
-            Log.e(TAG, "ProtocolException: " + e.message)
-
-        } catch (e: IOException) {
-            Log.e(TAG, "IOException: " + e.message)
-
-        } catch (e: Exception) {
-            Log.e(TAG, "Exception: " + e.message)
+        } finally {
+            connection.disconnect()
         }
-
-        return response
-    }
-
-    private fun convertStreamToString(
-        inputStream: InputStream
-    ): String {
-
-        val reader =
-            BufferedReader(
-                InputStreamReader(inputStream)
-            )
-
-        val stringBuilder = StringBuilder()
-
-        reader.forEachLine {
-            stringBuilder.append(it).append("\n")
-        }
-
-        return stringBuilder.toString()
     }
 }
