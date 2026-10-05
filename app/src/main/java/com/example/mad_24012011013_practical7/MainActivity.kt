@@ -1,10 +1,8 @@
 package com.example.mad_24012011013_practical7
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -26,22 +24,18 @@ class MainActivity : AppCompatActivity() {
         val list = findViewById<ListView>(R.id.peopleList)
         progress = findViewById(R.id.progressBar)
         emptyText = findViewById(R.id.emptyText)
-        adapter = PersonAdapter(this, people,
-            onEdit = { person ->
-                startActivity(Intent(this, EditActivity::class.java).apply {
-                    putExtra(EditActivity.EXTRA_PERSON, person)
-                })
-            },
-            onDelete = { person ->
-                db.delete(person.id)
-                loadLocal()
-                Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show()
-            }
-        )
-        list.adapter = adapter
 
-        findViewById<Button>(R.id.refreshButton).setOnClickListener { refreshFromApi() }
+        adapter = PersonAdapter(this, people) { person ->
+            db.delete(person.id)
+            loadLocal()
+            Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show()
+        }
+
+        list.adapter = adapter
         list.emptyView = emptyText
+        findViewById<ImageButton>(R.id.refreshButton).setOnClickListener {
+            refreshFromApi()
+        }
     }
 
     override fun onResume() {
@@ -69,7 +63,11 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 runOnUiThread {
                     progress.visibility = View.GONE
-                    Toast.makeText(this, "Unable to load API data: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Unable to load API data: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }.start()
