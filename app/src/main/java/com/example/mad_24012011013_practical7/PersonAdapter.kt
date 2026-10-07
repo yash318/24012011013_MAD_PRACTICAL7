@@ -1,6 +1,7 @@
 package com.example.mad_24012011013_practical7
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,15 @@ class PersonAdapter(
         view.findViewById<TextView>(R.id.nameText).text = person.name
         view.findViewById<TextView>(R.id.contactText).text = "${person.phone}\n${person.email}"
         view.findViewById<TextView>(R.id.addressText).text = person.address
+
+        // Tap a person record to open the edit screen.
+        view.setOnClickListener {
+            val intent = Intent(context, EditActivity::class.java).apply {
+                putExtra(EditActivity.EXTRA_PERSON, person)
+            }
+            context.startActivity(intent)
+        }
+
         view.findViewById<ImageButton>(R.id.deleteButton).setOnClickListener {
             onDelete(person)
         }
