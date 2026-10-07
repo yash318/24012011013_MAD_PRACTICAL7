@@ -16,6 +16,16 @@ Develop an Android application that retrieves person data in JSON format from an
 - Preserve edited data in the local SQLite database
 - Display name, phone, email, address, latitude and longitude
 
+## 📸 Screenshots
+
+### Main Screen
+
+![Practical 7 Main Screen](screenshots/practical7_main_screen.svg)
+
+### Edit Person Screen
+
+![Practical 7 Edit Person Screen](screenshots/practical7_edit_screen.svg)
+
 ## 🔄 Application Flow
 
 ```text
@@ -168,6 +178,10 @@ The application uses an Internet JSON API and maps its user/address/geo fields i
 │           ├── activity_main.xml
 │           ├── activity_edit.xml
 │           └── single_item.xml
+│
+├── screenshots/
+│   ├── practical7_main_screen.svg
+│   └── practical7_edit_screen.svg
 │
 ├── build.gradle.kts
 ├── gradle.properties
